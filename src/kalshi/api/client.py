@@ -17,13 +17,23 @@ class KalshiClient:
     # ---------- Public endpoints ----------
 
     def get_market(self, ticker):
-        return self._get(f"/markets/{ticker}")
+        response = self._get(f"/markets/{ticker}")
+        return response.get("market", response)
 
     def get_event(self, event_ticker):
-        return self._get(f"/events/{event_ticker}")
+        response = self._get(f"/events/{event_ticker}")
+        return response.get("event", response)
 
     def get_event_markets(self, event_ticker):
         return self._get(f"/events/{event_ticker}/markets")
 
     def get_orderbook(self, ticker):
         return self._get(f"/markets/{ticker}/orderbook")
+
+    def search_markets(self, query=None, limit=20, status="open"):
+        """Search for markets. Returns list of markets."""
+        params = {"limit": limit, "status": status}
+        if query:
+            params["event_ticker"] = query
+        response = self._get("/markets", params=params)
+        return response.get("markets", [])
