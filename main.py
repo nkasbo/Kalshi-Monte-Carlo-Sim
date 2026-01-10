@@ -1,7 +1,6 @@
 from typing import Dict
 from src.kalshi.api.client import KalshiClient
-from typing import Dict
-from src.kalshi.api.client import KalshiClient
+from src.kalshi.data.storage import save_market
 
 
 def clean_market(market: Dict) -> Dict:
@@ -46,6 +45,12 @@ def main():
         print("-" * 40)
         for k, v in cleaned.items():
             print(f"{k:20}: {v}")
+        
+        # Ask to save
+        print("\n" + "-" * 40)
+        save_choice = input("Save to CSV? (y/n): ").strip().lower()
+        if save_choice == 'y':
+            save_market(cleaned)
             
     except Exception as e:
         if "404" in str(e):
